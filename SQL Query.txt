@@ -1,0 +1,32 @@
+﻿SQL 
+-----------------------------------------------------------------------------------------------
+1)ТОП-5 стран по колличеству населения в столице
+
+
+SELECT country.Name FROM city INNER JOIN country  ON city.ID = country.Capital ORDER BY city.population DESC LIMIT 5;
+
+
+
+-----------------------------------------------------------------------------------------------
+
+2)Суммарное колличество людей говорящих на английском языке в Европе
+
+
+SELECT SUM(country.Population * countrylanguage.Percentage /100) FROM country INNER JOIN countrylanguage
+ON country.Code = countrylanguage.CountryCode AND countrylanguage.Language = 'English'
+AND country.Continent = 'Europe';
+
+
+
+-----------------------------------------------------------------------------------------------
+
+3)Список стран с двумя и более официальными языками, в которых колличество неофициальных языков как минимум вдвое больше, чем официальных.
+
+
+ SELECT t1.Name FROM 
+ (SELECT * FROM (SELECT c.Name, count(IsOfficial) AS cit FROM countrylanguage cl INNER JOIN  country c ON cl.CountryCode = c.Code AND cl.IsOfficial = 'T' GROUP BY c.Code)
+ as tr WHERE (cit > 1)) AS t1 
+ INNER JOIN 
+ (SELECT * FROM (SELECT c.Name, count(IsOfficial) AS cif FROM countrylanguage cl INNER JOIN  country c ON cl.CountryCode = c.Code AND cl.IsOfficial = 'F' GROUP BY c.Code)
+ as fs WHERE (cif > 3)) AS t2
+ ON t1.Name = t2.Name WHERE (cif  > (cit * 2));
