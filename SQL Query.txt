@@ -12,7 +12,7 @@ SELECT country.Name FROM city INNER JOIN country  ON city.ID = country.Capital O
 2)Суммарное колличество людей говорящих на английском языке в Европе
 
 
-SELECT SUM(country.Population * countrylanguage.Percentage /100) FROM country INNER JOIN countrylanguage
+SELECT ROUND(SUM(country.Population * countrylanguage.Percentage /100)) FROM country INNER JOIN countrylanguage
 ON country.Code = countrylanguage.CountryCode AND countrylanguage.Language = 'English'
 AND country.Continent = 'Europe';
 
